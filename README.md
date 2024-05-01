@@ -12,7 +12,7 @@ This tool also executes `kubectl` commands. While they should be read-only comma
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install KubeAI.
 
 ```bash
-pip install <TODO>
+pip install kubeai
 ```
 
 ### Configuration
@@ -31,7 +31,7 @@ kubeai chat [OPTIONS]
 
 Options:
 - -p, --prompt Provide an initial prompt to start the conversation (optional)
-- -t, --terminal End the conversation by closing the terminal session (optional)
+- -t, --terminal Conversation will end after one response (optional)
 - --disable-execution Disable execution of kubectl commands (optional)
 
 ### Explain
@@ -42,7 +42,7 @@ kubeai explain --cmd='kubectl [command]' [OPTIONS]
 
 Options:
 - -p, --prompt Provide an additional prompt to go along with the command output (optional)
-- -t, --terminal End the conversation by closing the terminal session (optional)
+- -t, --terminal Conversation will end after one response (optional)
 - --disable-execution Disable execution of kubectl commands (optional)
 
 Note: Only `kubectl` commands are valid for explanation.
@@ -56,19 +56,21 @@ If no prompt is provided, KubeAI will attempt to discover the problem itself (un
 
 Options:
 - -p, --prompt A prompt describing the problem to analyze (optional)
-- -t, --terminal End the conversation by closing the terminal session (optional)
+- -t, --terminal Conversation will end after one response (optional)
 - --disable-execution Disable execution of kubectl commands (optional)
+
+Note: --disable-execution with signficantly reduce KubeAI's ability to discover a problem. 
 
 ### Common Commands
 ```bash
 # Start a chat session with KubeAI
 kubeai chat
 
-# Explain the output a specific kubectl command
-kubeai explain --cmd 'kubectl get pods'
+# Explain the output a specific kubectl command, end chat after first response
+kubeai explain --cmd='kubectl get pods' -t
 
 # Suggest a fix for a described problem
-kubeai fix --prompt 'Pods are crashing frequently'
+kubeai fix --prompt='Pods in `default` namespace are crashing frequently'
 ```
 
 ## Contributing
@@ -78,4 +80,4 @@ to discuss what you would like to change.
 
 ## License
 
-<TODO>
+This code is distributed under the AGPL v3 licensce.
