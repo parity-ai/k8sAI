@@ -17,10 +17,7 @@ pip install kubeai
 
 ### Configuration
 
-Before using KubeAI, ensure your OpenAI API key is set as an environment variable:
-```bash
-export OPENAI_API_KEY='your-api-key-here'
-```
+Before using KubeAI, ensure your OpenAI API key is set as an environment variable (`OPENAI_API_KEY`).
 
 ## Usage
 ### Chat
