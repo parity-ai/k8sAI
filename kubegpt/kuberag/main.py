@@ -15,9 +15,9 @@ class KubeGPT:
         self.retriever = load_retriever(embeddings_path)
         self.bot = create_bot(self.retriever)
 
-    def start_chat(self, prompt, logs: str = "<no logs provided>"):
+    def start_chat(self, prompt, command_output="", logs: str = "<no logs provided>", terminal=False):
         '''
-        Start a chat with the bot. User can end with 'exit'. 
+        Start a chat with the bot. User can end with 'exit'.
             Args:
                 logs (str): The logs to provide to the bot.
         '''
@@ -29,15 +29,17 @@ class KubeGPT:
                 user_prompt = input("Prompt: ")
             if user_prompt.lower() == "exit":
                 break
-            result = self.bot.invoke({"input": user_prompt, "logs": logs})
+            result = self.bot.invoke({"input": user_prompt, "logs": logs, "command_output": command_output})
             if registry.has_tool_handler(result['output']):
                 terminate = registry.use_handler(result['output'])
                 if terminate:
                     break
 
             print("\nKubeGPT: ", result['output'])
+            if terminal:
+                break
 
 if __name__ == "__main__":
     path = os.path.join(os.getcwd(), "kubegpt/kuberag/embeddings")
     kubegpt = KubeGPT(path)
-    kubegpt.start_chat(None)
+    kubegpt.start_chat(None, None)

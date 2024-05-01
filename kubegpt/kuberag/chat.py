@@ -14,8 +14,10 @@ chat_prompt = ChatPromptTemplate.from_messages(
                 "system",
                 "You are a helpful, concise chatbot and kubernetes expert. Use the tools you have at your disposal to \
                 get information about kubernetes or to suggest a command to the user. \
+                If nothing is wrong, and the user asks for a fix, concisely let them know everything looks healthy.\
                 Answer the user's questions based on your general knowledge of kubernetes, with your tools, \
-                and the following logs (if provided):\n\n{logs}",
+                and the following logs (if provided):\n\n{logs}\n\
+                Kubectl command output (optional):\n\n{command_output}",
             ),
             ("placeholder", "{chat_history}"),
             ("human", "{input}"),
