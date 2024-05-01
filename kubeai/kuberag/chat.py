@@ -4,17 +4,16 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain.memory import ChatMessageHistory
 from langchain_openai import ChatOpenAI
-from langchain.agents import create_openai_functions_agent
-from langchain.agents import AgentExecutor
+from langchain.agents import AgentExecutor, create_openai_functions_agent
 from kubeai.kuberag.tools import get_all_tools
 
 llm = ChatOpenAI(model="gpt-4")
 
 chat_prompt = ChatPromptTemplate.from_messages(
-        [
-            (
-                "system",
-                "You are a helpful, concise chatbot and kubernetes expert. Use the tools you have at your disposal to \
+    [
+        (
+            "system",
+            "You are a helpful, concise chatbot and kubernetes expert. Use the tools you have at your disposal to \
                 get information about kubernetes or to suggest a command to the user. \
                 When possible and if provided, use the execute tool to gather more information about the cluster before answering. \
                 If you use the execute tool, be sure to use the results in future answers and to fill in information and arguments. \
@@ -27,17 +26,18 @@ chat_prompt = ChatPromptTemplate.from_messages(
                 Answer the user's questions based on your general knowledge of kubernetes, with your tools, \
                 and the following logs (if provided):\n\n{logs}\n\
                 Kubectl command output (optional):\n\n{command_output}",
-            ),
-            ("placeholder", "{chat_history}"),
-            ("human", "{input}"),
-            ("ai", "{agent_scratchpad}"),
-        ]
-    )
+        ),
+        ("placeholder", "{chat_history}"),
+        ("human", "{input}"),
+        ("ai", "{agent_scratchpad}"),
+    ]
+)
+
 
 def create_bot(retriever, disable_execution=False):
-    '''
+    """
     Create a bot with a retriever.
-    '''
+    """
     tools = get_all_tools(retriever, disable_execution=disable_execution)
 
     agent = create_openai_functions_agent(llm, tools, chat_prompt)

@@ -1,7 +1,7 @@
 # file: kubeai/main.py
-'''
+"""
 This module contains the commands for the CLI.
-'''
+"""
 
 import subprocess
 import click
@@ -9,25 +9,36 @@ import click
 from kubeai.kuberag.main import KubeAI
 from kubeai.util import console
 
+
 @click.group()
 def chat_group():
-    '''
-    This tool uses OpenAI's ChatGPT to chat about Kubernetes. 
+    """
+    This tool uses OpenAI's ChatGPT to chat about Kubernetes.
     It is enhanced with a retriever storing k8s documentation to improve results.
     It uses your OpenAI API key from $OPENAI_API_KEY to access the model.
 
     NOTE: This tool sends data to OpenAI's servers. Please review the OpenAI API terms of use.
-    '''
+    """
+
 
 @chat_group.command()
-@click.option('-p', '--prompt', help='Initial prompt to start the conversation. (optional)')
-@click.option('-t', '--terminal', is_flag=True, default=False,
-              help='If terminal is enabled, KubeAI will end the conversation (optional)')
-@click.option('--disable-execution',
-              is_flag=True,
-              default=False,
-              help='If execution is disabled, KubeAI wil not \
-                be capable of executing kubectl commands (optional)')
+@click.option(
+    "-p", "--prompt", help="Initial prompt to start the conversation. (optional)"
+)
+@click.option(
+    "-t",
+    "--terminal",
+    is_flag=True,
+    default=False,
+    help="If terminal is enabled, KubeAI will end the conversation (optional)",
+)
+@click.option(
+    "--disable-execution",
+    is_flag=True,
+    default=False,
+    help="If execution is disabled, KubeAI wil not \
+                be capable of executing kubectl commands (optional)",
+)
 def chat(prompt, terminal, disable_execution):
     """
     Start a conversation with the KubeAI model.
@@ -40,20 +51,29 @@ def chat(prompt, terminal, disable_execution):
 
     kube_ai.start_chat(prompt, terminal=terminal)
 
+
 @chat_group.command()
-@click.option('--cmd', help='Kubectl command that KubeAI will explain the results of')
-@click.option('-p', '--prompt',
-              help='Additional prompt to go along with command output,\
-                otherwise default prompt is used (optional)')
-@click.option('-t', '--terminal',
-              is_flag=True,
-              default=False,
-              help='If terminal is enabled, KubeAI will end the conversation (optional)')
-@click.option('--disable-execution',
-              is_flag=True,
-              default=False,
-              help='If execution is disabled, KubeAI wil not be \
-                capable of executing kubectl commands (optional)')
+@click.option("--cmd", help="Kubectl command that KubeAI will explain the results of")
+@click.option(
+    "-p",
+    "--prompt",
+    help="Additional prompt to go along with command output,\
+                otherwise default prompt is used (optional)",
+)
+@click.option(
+    "-t",
+    "--terminal",
+    is_flag=True,
+    default=False,
+    help="If terminal is enabled, KubeAI will end the conversation (optional)",
+)
+@click.option(
+    "--disable-execution",
+    is_flag=True,
+    default=False,
+    help="If execution is disabled, KubeAI wil not be \
+                capable of executing kubectl commands (optional)",
+)
 def explain(cmd, prompt, terminal, disable_execution):
     """
     kubectl command will be executed and KubeAI will explain the result
@@ -64,7 +84,7 @@ def explain(cmd, prompt, terminal, disable_execution):
         return
 
     console.print(f":gear: running command: {cmd}")
-    output = subprocess.check_output(cmd, shell=True).decode('utf-8')
+    output = subprocess.check_output(cmd, shell=True).decode("utf-8")
     console.print(f":green_circle: command complete:\n{output}")
 
     if not prompt:
@@ -79,12 +99,21 @@ def explain(cmd, prompt, terminal, disable_execution):
 
 
 @chat_group.command()
-@click.option('-p', '--prompt', help='A prompt describing the problem (optional)')
-@click.option('-t', '--terminal', is_flag=True, default=False,
-              help='If terminal is enabled, KubeAI will end the conversation (optional)')
-@click.option('--disable-execution', is_flag=True, default=False,
-              help='If execution is disabled, KubeAI wil not be capable of \
-                executing kubectl commands (optional)')
+@click.option("-p", "--prompt", help="A prompt describing the problem (optional)")
+@click.option(
+    "-t",
+    "--terminal",
+    is_flag=True,
+    default=False,
+    help="If terminal is enabled, KubeAI will end the conversation (optional)",
+)
+@click.option(
+    "--disable-execution",
+    is_flag=True,
+    default=False,
+    help="If execution is disabled, KubeAI wil not be capable of \
+                executing kubectl commands (optional)",
+)
 def fix(prompt, terminal, disable_execution):
     """
     KubeAI will suggest a fix based on a description of the problem
@@ -107,7 +136,7 @@ def fix(prompt, terminal, disable_execution):
 
 
 def main():
-    '''
+    """
     Main function for the CLI.
-    '''
+    """
     chat_group()
