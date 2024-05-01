@@ -1,14 +1,14 @@
-# KubeAI
+# K9ai
 
-KubeAI is a RAG-enabled GPT that uses a vector store with the embeddings of the [Kubernetes documentation](https://kubernetes.io/docs/).
+K9ai is a RAG-enabled GPT that uses a vector store with the embeddings of the [Kubernetes documentation](https://kubernetes.io/docs/).
 It can answer general questions about Kubernetes, explain output of provided kubectl commands, and suggested commands for you to then easily execute.
 Given an issue, it can also use kubectl commands to understand the issue and suggest a fix.
 
 <p align="center">
-  <img src="https://github.com/wilson090/KubeAI/assets/30668639/62549327-a4d2-44a0-8e85-2aa589582929">
+  <img src="https://github.com/wilson090/K9ai/assets/30668639/62549327-a4d2-44a0-8e85-2aa589582929">
 </p>
 
-KubeAI has a few tools at its disposal that it can call to answer your questions and fix issues:
+K9ai has a few tools at its disposal that it can call to answer your questions and fix issues:
 - `Execute_Kubectl_CMD_Tool` - KubeGPT can use this to execute kubectl read commands to gather more information about your cluster
 - `Suggest_Kubectl_CMD_Tool` - KubeGPT uses this to suggest a kubectl command to you that you can then edit and execute
 - `k8s_search` - This tool is used by KubeGPT to search k8s documentation to provide informed solutions
@@ -19,21 +19,21 @@ This tool also executes `kubectl` commands. While they should be read-only comma
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install KubeAI.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install K9ai.
 
 ```bash
-pip install kubeai
+pip install k9ai
 ```
 
 ### Configuration
 
-Before using KubeAI, ensure your OpenAI API key is set as an environment variable (`OPENAI_API_KEY`).
+Before using K9ai, ensure your OpenAI API key is set as an environment variable (`OPENAI_API_KEY`).
 
 ## Usage
 ### Chat
-To start a conversation with KubeAI:
+To start a conversation with K9ai:
 ```bash
-kubeai chat [OPTIONS]
+k9ai chat [OPTIONS]
 ```
 
 Options:
@@ -42,9 +42,9 @@ Options:
 - --disable-execution Disable execution of kubectl commands (optional)
 
 ### Explain
-To have KubeAI explain the output of a Kubernetes command:
+To have K9ai explain the output of a Kubernetes command:
 ```bash
-kubeai explain --cmd='kubectl [command]' [OPTIONS]
+k9ai explain --cmd='kubectl [command]' [OPTIONS]
 ```
 
 Options:
@@ -55,29 +55,29 @@ Options:
 Note: Only `kubectl` commands are valid for explanation.
 
 ### Fix
-To request KubeAI to suggest a fix based on a provided description of the problem:
+To request K9ai to suggest a fix based on a provided description of the problem:
 ```bash
-kubeai fix [OPTIONS]
+k9ai fix [OPTIONS]
 ```
-If no prompt is provided, KubeAI will attempt to discover the problem itself (under development)
+If no prompt is provided, K9ai will attempt to discover the problem itself (under development)
 
 Options:
 - -p, --prompt A prompt describing the problem to analyze (optional)
 - -t, --terminal Conversation will end after one response (optional)
 - --disable-execution Disable execution of kubectl commands (optional)
 
-Note: --disable-execution with signficantly reduce KubeAI's ability to discover a problem. 
+Note: --disable-execution with signficantly reduce K9ai's ability to discover a problem. 
 
 ### Common Commands
 ```bash
-# Start a chat session with KubeAI
-kubeai chat
+# Start a chat session with K9ai
+k9ai chat
 
 # Explain the output a specific kubectl command, end chat after first response
-kubeai explain --cmd='kubectl get pods' -t
+k9ai explain --cmd='kubectl get pods' -t
 
 # Suggest a fix for a described problem
-kubeai fix --prompt='Pods in `default` namespace are crashing frequently'
+k9ai fix --prompt='Pods in `default` namespace are crashing frequently'
 ```
 
 ## Contributing
