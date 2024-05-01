@@ -3,6 +3,7 @@
 import os
 from kubegpt.kuberag.chat import create_bot
 from kubegpt.kuberag.retriever import load_retriever
+from kubegpt.kuberag.tool_handler import registry
 
 class KubeGPT:
     '''
@@ -20,15 +21,21 @@ class KubeGPT:
             Args:
                 logs (str): The logs to provide to the bot.
         '''
-        if prompt:
-            result = self.bot.invoke({"input": prompt, "logs": logs})
-            print("KubeGPT: ", result["answer"])
         while True:
-            user_prompt = input("Prompt: ")
+            if prompt:
+                user_prompt = prompt
+                prompt = None
+            else:
+                user_prompt = input("Prompt: ")
             if user_prompt.lower() == "exit":
                 break
             result = self.bot.invoke({"input": user_prompt, "logs": logs})
-            print("KubeGPT: ", result["answer"])
+            if registry.has_tool_handler(result['output']):
+                terminate = registry.use_handler(result['output'])
+                if terminate:
+                    break
+
+            print("\nKubeGPT: ", result['output'])
 
 if __name__ == "__main__":
     path = os.path.join(os.getcwd(), "kubegpt/kuberag/embeddings")

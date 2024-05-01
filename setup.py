@@ -9,7 +9,8 @@ setup(
         'click',
         'langchain',
         'langchain-chroma',
-        'langchain_openai'
+        'langchain_openai',
+        'prompt_toolkit'
     ],
     entry_points='''
         [console_scripts]
