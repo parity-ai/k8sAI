@@ -1,13 +1,13 @@
 # file: kubeai/kuberag/main.py
-
 import os
 import pkg_resources
+from rich.padding import Padding
+from rich.markdown import Markdown
+
 from kubeai.kuberag.chat import create_bot
 from kubeai.kuberag.retriever import load_retriever
 from kubeai.kuberag.tool_handler import registry
 from kubeai.util import console
-from rich.padding import Padding
-from rich.markdown import Markdown
 
 def get_embeddings_path():
     """Get the absolute path to the embeddings directory."""
@@ -16,16 +16,22 @@ def get_embeddings_path():
 
 class KubeAI:
     '''
-    KubeAI is a class that allows you to chat with a GPT model. It uses a retriever to find relevant information.
+    KubeAI is a class that allows you to chat with a GPT model.
+    It uses a retriever to find relevant information.
         Args:
             disable_execution (bool): If True, the bot cannot execute kubectl commands to help.
             embeddings_path (str): The path to the stored embeddings
     '''
-    def __init__(self, disable_execution: bool = False, embeddings_path: str = get_embeddings_path()):
+    def __init__(self,
+                 disable_execution: bool = False,
+                 embeddings_path: str = get_embeddings_path()):
         self.retriever = load_retriever(embeddings_path)
         self.bot = create_bot(self.retriever, disable_execution)
 
-    def start_chat(self, prompt, command_output="", logs: str = "<no logs provided>", terminal=False):
+    def start_chat(self,
+                   prompt,
+                   command_output="", logs: str = "<no logs provided>",
+                   terminal=False):
         '''
         Start a chat with the bot. User can end with 'exit'.
             Args:
@@ -40,12 +46,15 @@ class KubeAI:
             if user_prompt.lower() == "exit":
                 break
             # result = self.bot.invoke()
-            for chunk in self.bot.stream({"input": user_prompt, "logs": logs, "command_output": command_output},
-                                         config={"configurable": {"session_id": "<foo>"}}):
+            for chunk in self.bot.stream({"input": user_prompt,
+                                          "logs": logs,
+                                          "command_output": command_output},
+                                          config={"configurable": {"session_id": "<foo>"}}):
                     # Agent Action
                 if "actions" in chunk:
                     for action in chunk["actions"]:
-                        console.print(Padding(f":hammer: Calling Tool: `{action.tool}` with input `{action.tool_input}`", pad=(0, 0, 0, 2)))
+                        console.print(Padding(f":hammer: Calling Tool: `{action.tool}` with input `\
+                                              {action.tool_input}`", pad=(0, 0, 0, 2)))
                 # Observation
                 elif "steps" in chunk:
                     pass
@@ -55,7 +64,7 @@ class KubeAI:
                         terminate = registry.use_handler(chunk["output"])
                         if terminate:
                             break
-                    
+
                     console.print("KubeAI:")
                     console.print(Markdown(chunk["output"]))
 
@@ -68,5 +77,5 @@ class KubeAI:
 
 if __name__ == "__main__":
     path = os.path.join(os.getcwd(), "kubeai/kuberag/embeddings")
-    kubeai = KubeAI(path)
-    kubeai.start_chat(None, None)
+    kubeai = KubeAI(embeddings_path=path)
+    kubeai.start_chat(None)
