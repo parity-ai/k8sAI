@@ -3,8 +3,7 @@
 KubeAI is a RAG-enabled GPT that uses a vector store with the embeddings of the [Kubernetes documentation](https://kubernetes.io/docs/).
 It can answer general questions about Kubernetes, explain or suggest fixes based on the output of kubectl commands, and provide suggested commands for you to then easily execute.
 
-![Chat example](https://github.com/wilson090/KubeAI/assets/30668639/90afa809-9654-4f2a-be2c-371444b2c795)
-
+![Chat example (2)](https://github.com/wilson090/KubeAI/assets/30668639/62549327-a4d2-44a0-8e85-2aa589582929)
 
 ### Note:
 This tool sends data to OpenAI's servers. Please review the OpenAI API terms of use before using this tool.
@@ -40,8 +39,6 @@ To have KubeAI explain the output of a Kubernetes command:
 kubeai explain --cmd='kubectl [command]' [OPTIONS]
 ```
 
-![Explain example](https://github.com/wilson090/KubeAI/assets/30668639/a900a77e-4997-4407-b20d-7773beeeb498)
-
 Options:
 - -p, --prompt Provide an additional prompt to go along with the command output (optional)
 - -t, --terminal Conversation will end after one response (optional)
@@ -55,8 +52,6 @@ To request KubeAI to suggest a fix based on a provided description of the proble
 kubeai fix [OPTIONS]
 ```
 If no prompt is provided, KubeAI will attempt to discover the problem itself (under development)
-
-![Fix example](https://github.com/wilson090/KubeAI/assets/30668639/a4f4bfd3-f996-4224-925d-0fa2a9207334)
 
 Options:
 - -p, --prompt A prompt describing the problem to analyze (optional)
