@@ -16,13 +16,15 @@ def chat_group():
 @chat_group.command()
 @click.option('-p', '--prompt', help='Initial prompt to start the conversation. (optional)')
 @click.option('-t', '--terminal', is_flag=True, default=False, help='If terminal is enabled, kubeGPT will end the conversation (optional)')
-def chat(prompt, terminal):
+@click.option('--enable-execution', is_flag=True, default=False, help='If execution is enabled, kubeGPT wil be capable of executing kubectl commands (optional)')
+def chat(prompt, terminal, enable_execution):
     """
     Start a conversation with the KubeGPT model. KubeGPT can suggest commands that can then be executed.
     """
-    kube_gpt = KubeGPT()  # Assume default embeddings path, modify as needed
+    kube_gpt = KubeGPT(enable_execution)
     print("Starting conversation with KubeGPT...")
-    print("Type 'exit' to end the conversation.")
+    if not terminal:
+        print("Type 'exit' to end the conversation.")
 
     kube_gpt.start_chat(prompt, terminal=terminal)
 
@@ -30,7 +32,8 @@ def chat(prompt, terminal):
 @click.option('--cmd', help='Kubectl command that kubeGPT will explain the results of')
 @click.option('-p', '--prompt', help='Additional prompt to go along with command output, otherwise default prompt is used (optional)')
 @click.option('-t', '--terminal', is_flag=True, default=False, help='If terminal is enabled, kubeGPT will end the conversation (optional)')
-def explain(cmd, prompt, terminal):
+@click.option('--enable-execution', is_flag=True, default=False, help='If execution is enabled, kubeGPT wil be capable of executing kubectl commands (optional)')
+def explain(cmd, prompt, terminal, enable_execution):
     """
     kubectl command will be executed and KubeGPT will explain the result
     """
@@ -46,7 +49,7 @@ def explain(cmd, prompt, terminal):
     if not prompt:
         prompt = "Concisely explain the output of the following command: " + cmd
 
-    kube_gpt = KubeGPT()
+    kube_gpt = KubeGPT(enable_execution)
     print("Explaining kubectl results with KubeGPT...")
     if not terminal:
         print("Type 'exit' to end the conversation.")
@@ -58,7 +61,8 @@ def explain(cmd, prompt, terminal):
 @click.option('--cmd', help='Kubectl command that kubeGPT will use the results of')
 @click.option('-p', '--prompt', help='Additional prompt to go along with command output, otherwise default prompt is used (optional)')
 @click.option('-t', '--terminal', is_flag=True, default=False, help='If terminal is enabled, kubeGPT will end the conversation (optional)')
-def fix(cmd, prompt, terminal):
+@click.option('--enable-execution', is_flag=True, default=False, help='If execution is enabled, kubeGPT wil be capable of executing kubectl commands (optional)')
+def fix(cmd, prompt, terminal, enable_execution):
     """
     kubectl command will be executed and KubeGPT will suggest a fix based on the output of the command
     """
@@ -74,7 +78,7 @@ def fix(cmd, prompt, terminal):
     if not prompt:
         prompt = "Based on the results of this command, suggest a fix (unless none is needed): " + cmd
 
-    kube_gpt = KubeGPT()
+    kube_gpt = KubeGPT(enable_execution)
     print("Looking for fix with KubeGPT...")
     if not terminal:
         print("Type 'exit' to end the conversation.")

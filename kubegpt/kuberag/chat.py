@@ -4,7 +4,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_openai_functions_agent
 from langchain.agents import AgentExecutor
-from kubegpt.kuberag.tools import getAllTools
+from kubegpt.kuberag.tools import get_all_tools
 
 llm = ChatOpenAI(model="gpt-4")
 
@@ -25,11 +25,11 @@ chat_prompt = ChatPromptTemplate.from_messages(
         ]
     )
 
-def create_bot(retriever):
+def create_bot(retriever, disable_execution=False):
     '''
     Create a bot with a retriever.
     '''
-    tools = getAllTools(retriever)
+    tools = get_all_tools(retriever, disable_execution=disable_execution)
 
     agent = create_openai_functions_agent(llm, tools, chat_prompt)
     agent_executor = AgentExecutor(agent=agent, tools=tools)

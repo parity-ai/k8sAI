@@ -1,19 +1,26 @@
 # file: kubegpt/kuberag/main.py
 
 import os
+import pkg_resources
 from kubegpt.kuberag.chat import create_bot
 from kubegpt.kuberag.retriever import load_retriever
 from kubegpt.kuberag.tool_handler import registry
+
+def get_embeddings_path():
+    """Get the absolute path to the embeddings directory."""
+    resource_path = pkg_resources.resource_filename(__name__, "embeddings")
+    return resource_path
 
 class KubeGPT:
     '''
     KubeGPT is a class that allows you to chat with a GPT model. It uses a retriever to find relevant information.
         Args:
+            disable_execution (bool): If True, the bot cannot execute kubectl commands to help.
             embeddings_path (str): The path to the stored embeddings
     '''
-    def __init__(self, embeddings_path: str = "kubegpt/kuberag/embeddings"):
+    def __init__(self, disable_execution: bool = False, embeddings_path: str = get_embeddings_path()):
         self.retriever = load_retriever(embeddings_path)
-        self.bot = create_bot(self.retriever)
+        self.bot = create_bot(self.retriever, disable_execution)
 
     def start_chat(self, prompt, command_output="", logs: str = "<no logs provided>", terminal=False):
         '''
