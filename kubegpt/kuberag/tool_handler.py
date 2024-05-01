@@ -3,6 +3,7 @@
 import json
 from prompt_toolkit import prompt
 import os
+from kubegpt.util import console
 
 class ToolHandlerRegistry:
     '''
@@ -36,7 +37,7 @@ class ToolHandlerRegistry:
             if input_string.startswith(prefix):
                 return handler(input_string, prefix)
         else:
-            print("Error: No handler found for the input string.")
+            console.print("Error: No handler found for the input string.")
         return None
 
 #TODO: create proper tool handler objects with data parse fn, etc.
@@ -53,24 +54,23 @@ def handle_kubectl_tool(input_string, prefix) -> bool:
     try:
         data = json.loads(json_part)
         if "notes" in data:
-            print("\n")
-            print(data["notes"])
+            console.print("\n")
+            console.print(data["notes"])
         if "query" in data:
-            print("Press enter to run the following command:")
-            cmd =  prompt("Edit the cmd and (enter) to run, leave empty to return to GPT\n\n", default=data["query"])
+            cmd =  prompt("Edit the cmd and press (enter) to run, leave empty to return to GPT\n\n", default=data["query"])
             # Split the command into the command and its arguments for execvp
             args = cmd.split()
 
             # Check if any command is entered, then execute it
             if args:
-                print("\n")
+                console.print("\n")
                 # Replace the current process with the new command
                 os.execvp(args[0], args)
             else:
-                print("No command entered.")
+                console.print("No command entered.")
             
     except json.JSONDecodeError:
-        print("Error: The string is not valid JSON.", {json_part})
+        console.print("Error: The string is not valid JSON.", {json_part})
 
     return True
 

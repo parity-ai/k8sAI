@@ -2,6 +2,7 @@
 
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
+from kubegpt.util import console
 
 def load_retriever(embeddings_path: str):
     '''
@@ -14,7 +15,7 @@ def load_retriever(embeddings_path: str):
 
     # Check if the vector database is empty and log a warning if so
     if len(vectordb.get(limit=1).get('documents', [])) == 0:
-        print("Warning: The vector database is empty.")
+        console.print("Warning: The vector database is empty.")
 
     retriever = vectordb.as_retriever(
         search_type="mmr",  # Also test "similarity"

@@ -5,6 +5,9 @@ import pkg_resources
 from kubegpt.kuberag.chat import create_bot
 from kubegpt.kuberag.retriever import load_retriever
 from kubegpt.kuberag.tool_handler import registry
+from kubegpt.util import console
+from rich.padding import Padding
+from rich.markdown import Markdown
 
 def get_embeddings_path():
     """Get the absolute path to the embeddings directory."""
@@ -36,13 +39,30 @@ class KubeGPT:
                 user_prompt = input("Prompt: ")
             if user_prompt.lower() == "exit":
                 break
-            result = self.bot.invoke({"input": user_prompt, "logs": logs, "command_output": command_output})
-            if registry.has_tool_handler(result['output']):
-                terminate = registry.use_handler(result['output'])
-                if terminate:
-                    break
+            # result = self.bot.invoke()
+            for chunk in self.bot.stream({"input": user_prompt, "logs": logs, "command_output": command_output},
+                                         config={"configurable": {"session_id": "<foo>"}}):
+                    # Agent Action
+                if "actions" in chunk:
+                    for action in chunk["actions"]:
+                        console.print(Padding(f":hammer: Calling Tool: `{action.tool}` with input `{action.tool_input}`", pad=(0, 0, 0, 2)))
+                # Observation
+                elif "steps" in chunk:
+                    pass
+                # Final result
+                elif "output" in chunk:
+                    if registry.has_tool_handler(chunk["output"]):
+                        terminate = registry.use_handler(chunk["output"])
+                        if terminate:
+                            break
+                    
+                    console.print("KubeGPT:")
+                    console.print(Markdown(chunk["output"]))
 
-            print("\nKubeGPT: ", result['output'])
+                else:
+                    raise ValueError()
+                console.print("---")
+
             if terminal:
                 break
 

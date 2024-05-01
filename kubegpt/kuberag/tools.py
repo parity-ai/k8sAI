@@ -7,6 +7,8 @@ from typing import Optional, Type
 from langchain.tools.retriever import create_retriever_tool
 from langchain.pydantic_v1 import BaseModel, Field
 from langchain.tools import BaseTool
+from kubegpt.util import console
+from rich.padding import Padding
 
 from langchain.callbacks.manager import (
     AsyncCallbackManagerForToolRun,
@@ -30,6 +32,7 @@ class SuggestKubectlCommandTool(BaseTool):
     description = "Suggest a kubectl command to the user. This is a terminal command and will allow the user to \
     execute the command directly. They will be able to edit it before executing.\
     The command MUST be properly formatted, but it can contain placeholder values for the user to fill in. \
+    Fill in values to the BEST of your ability (but if you don't know, use a placeholder) and if you can retrieve them with another tool, do that first! \
     This is a useful tool for suggesting commands to the user and you're very much encouraged to use it \
     if it answer's the user's question or solves their errors. If the user's question is more general, you should use the `k8s_search` \
     tool instead or answer the question directly."
@@ -69,6 +72,8 @@ class ExecuteKubectlCommandTool(BaseTool):
     description = "Execute a kubectl command and receive the results. This allows you to retrieve info about the user's k8s \
     configuration in order to properly assit them. Anytime you need information about their cluster in order to inform \
     your decisions, use this tool by passing in a kubectl command. \
+    When possible, use this tool over the suggest tool! Users appreciate that. \
+    The results from this tool can be used to make better suggestions to the user, so this tool is extremely useful. \
     The command MUST be properly formatted. It can also only be a READ-ONLY command. \
     Under no circumstances should you modify underlying resources with this tool!!!"
     args_schema: Type[BaseModel] = ExecuteKubectlCommandInput
@@ -98,9 +103,9 @@ class ExecuteKubectlCommandTool(BaseTool):
             return "Error: Command is not permitted, must be a read-only operation"
 
         try:
-            print(f"Running command: {command}")
+            console.print(Padding(f":gear: running command: {command}", pad=(0, 0, 0, 2)))
             output = subprocess.check_output(command, shell=True).decode('utf-8')
-            print(f"Command complete.")
+            console.print(Padding(":green_circle: command complete", pad=(0, 0, 0, 2)))
             return output
         except subprocess.CalledProcessError as e:
             return f"Error: {e}"
