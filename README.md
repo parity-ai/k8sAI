@@ -1,9 +1,17 @@
 # KubeAI
 
 KubeAI is a RAG-enabled GPT that uses a vector store with the embeddings of the [Kubernetes documentation](https://kubernetes.io/docs/).
-It can answer general questions about Kubernetes, explain or suggest fixes based on the output of kubectl commands, and provide suggested commands for you to then easily execute.
+It can answer general questions about Kubernetes, explain output of provided kubectl commands, and suggested commands for you to then easily execute.
+Given an issue, it can also use kubectl commands to understand the issue and suggest a fix.
 
-![Chat example (2)](https://github.com/wilson090/KubeAI/assets/30668639/62549327-a4d2-44a0-8e85-2aa589582929)
+<p align="center">
+  <img src="https://github.com/wilson090/KubeAI/assets/30668639/62549327-a4d2-44a0-8e85-2aa589582929">
+</p>
+
+KubeAI has a few tools at its disposal that it can call to answer your questions and fix issues:
+- `Execute_Kubectl_CMD_Tool` - KubeGPT can use this to execute kubectl read commands to gather more information about your cluster
+- `Suggest_Kubectl_CMD_Tool` - KubeGPT uses this to suggest a kubectl command to you that you can then edit and execute
+- `k8s_search` - This tool is used by KubeGPT to search k8s documentation to provide informed solutions
 
 ### Note:
 This tool sends data to OpenAI's servers. Please review the OpenAI API terms of use before using this tool.
