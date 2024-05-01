@@ -1,6 +1,6 @@
-# KubeGPT
+# KubeAI
 
-KubeGPT is a RAG-enabled GPT that uses a vector store with the embeddings of the [Kubernetes documentation](https://kubernetes.io/docs/).
+KubeAI is a RAG-enabled GPT that uses a vector store with the embeddings of the [Kubernetes documentation](https://kubernetes.io/docs/).
 It can answer general questions about Kubernetes, explain or suggest fixes based on the output of kubectl commands, and provide suggested commands for you to then easily execute.
 
 ### Note:
@@ -9,7 +9,7 @@ This tool also executes `kubectl` commands. While they should be read-only comma
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install KubeGPT.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install KubeAI.
 
 ```bash
 pip install <TODO>
@@ -17,16 +17,16 @@ pip install <TODO>
 
 ### Configuration
 
-Before using KubeGPT, ensure your OpenAI API key is set as an environment variable:
+Before using KubeAI, ensure your OpenAI API key is set as an environment variable:
 ```bash
 export OPENAI_API_KEY='your-api-key-here'
 ```
 
 ## Usage
 ### Chat
-To start a conversation with KubeGPT:
+To start a conversation with KubeAI:
 ```bash
-kubegpt chat [OPTIONS]
+kubeai chat [OPTIONS]
 ```
 
 Options:
@@ -35,9 +35,9 @@ Options:
 - --disable-execution Disable execution of kubectl commands (optional)
 
 ### Explain
-To have KubeGPT explain the output of a Kubernetes command:
+To have KubeAI explain the output of a Kubernetes command:
 ```bash
-kubegpt explain --cmd='kubectl [command]' [OPTIONS]
+kubeai explain --cmd='kubectl [command]' [OPTIONS]
 ```
 
 Options:
@@ -48,11 +48,11 @@ Options:
 Note: Only `kubectl` commands are valid for explanation.
 
 ### Fix
-To request KubeGPT to suggest a fix based on a provided description of the problem:
+To request KubeAI to suggest a fix based on a provided description of the problem:
 ```bash
-kubegpt fix [OPTIONS]
+kubeai fix [OPTIONS]
 ```
-If no prompt is provided, KubeGPT will attempt to discover the problem itself (under development)
+If no prompt is provided, KubeAI will attempt to discover the problem itself (under development)
 
 Options:
 - -p, --prompt A prompt describing the problem to analyze (optional)
@@ -61,14 +61,14 @@ Options:
 
 ### Common Commands
 ```bash
-# Start a chat session with KubeGPT
-kubegpt chat
+# Start a chat session with KubeAI
+kubeai chat
 
 # Explain the output a specific kubectl command
-kubegpt explain --cmd 'kubectl get pods'
+kubeai explain --cmd 'kubectl get pods'
 
 # Suggest a fix for a described problem
-kubegpt fix --prompt 'Pods are crashing frequently'
+kubeai fix --prompt 'Pods are crashing frequently'
 ```
 
 ## Contributing

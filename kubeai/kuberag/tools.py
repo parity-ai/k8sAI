@@ -1,4 +1,4 @@
-# file: kubegpt/kuberag/tools.py
+# file: kubeai/kuberag/tools.py
 
 import json
 import re
@@ -7,7 +7,7 @@ from typing import Optional, Type
 from langchain.tools.retriever import create_retriever_tool
 from langchain.pydantic_v1 import BaseModel, Field
 from langchain.tools import BaseTool
-from kubegpt.util import console
+from kubeai.util import console
 from rich.padding import Padding
 
 from langchain.callbacks.manager import (

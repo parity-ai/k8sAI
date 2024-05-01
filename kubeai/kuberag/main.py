@@ -1,11 +1,11 @@
-# file: kubegpt/kuberag/main.py
+# file: kubeai/kuberag/main.py
 
 import os
 import pkg_resources
-from kubegpt.kuberag.chat import create_bot
-from kubegpt.kuberag.retriever import load_retriever
-from kubegpt.kuberag.tool_handler import registry
-from kubegpt.util import console
+from kubeai.kuberag.chat import create_bot
+from kubeai.kuberag.retriever import load_retriever
+from kubeai.kuberag.tool_handler import registry
+from kubeai.util import console
 from rich.padding import Padding
 from rich.markdown import Markdown
 
@@ -14,9 +14,9 @@ def get_embeddings_path():
     resource_path = pkg_resources.resource_filename(__name__, "embeddings")
     return resource_path
 
-class KubeGPT:
+class KubeAI:
     '''
-    KubeGPT is a class that allows you to chat with a GPT model. It uses a retriever to find relevant information.
+    KubeAI is a class that allows you to chat with a GPT model. It uses a retriever to find relevant information.
         Args:
             disable_execution (bool): If True, the bot cannot execute kubectl commands to help.
             embeddings_path (str): The path to the stored embeddings
@@ -56,7 +56,7 @@ class KubeGPT:
                         if terminate:
                             break
                     
-                    console.print("KubeGPT:")
+                    console.print("KubeAI:")
                     console.print(Markdown(chunk["output"]))
 
                 else:
@@ -67,6 +67,6 @@ class KubeGPT:
                 break
 
 if __name__ == "__main__":
-    path = os.path.join(os.getcwd(), "kubegpt/kuberag/embeddings")
-    kubegpt = KubeGPT(path)
-    kubegpt.start_chat(None, None)
+    path = os.path.join(os.getcwd(), "kubeai/kuberag/embeddings")
+    kubeai = KubeAI(path)
+    kubeai.start_chat(None, None)

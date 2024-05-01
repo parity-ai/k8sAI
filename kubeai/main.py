@@ -1,8 +1,8 @@
-# file: kubegpt/main.py
+# file: kubeai/main.py
 import click
-from kubegpt.kuberag.main import KubeGPT
+from kubeai.kuberag.main import KubeAI
 import subprocess
-from kubegpt.util import console
+from kubeai.util import console
 
 @click.group()
 def chat_group():
@@ -16,27 +16,27 @@ def chat_group():
 
 @chat_group.command()
 @click.option('-p', '--prompt', help='Initial prompt to start the conversation. (optional)')
-@click.option('-t', '--terminal', is_flag=True, default=False, help='If terminal is enabled, kubeGPT will end the conversation (optional)')
-@click.option('--disable-execution', is_flag=True, default=False, help='If execution is disabled, kubeGPT wil not be capable of executing kubectl commands (optional)')
+@click.option('-t', '--terminal', is_flag=True, default=False, help='If terminal is enabled, KubeAI will end the conversation (optional)')
+@click.option('--disable-execution', is_flag=True, default=False, help='If execution is disabled, KubeAI wil not be capable of executing kubectl commands (optional)')
 def chat(prompt, terminal, disable_execution):
     """
-    Start a conversation with the KubeGPT model. KubeGPT can suggest commands that can then be executed.
+    Start a conversation with the KubeAI model. KubeAI can suggest commands that can then be executed.
     """
-    kube_gpt = KubeGPT(disable_execution)
-    console.print(":robot: starting conversation with KubeGPT...")
+    kube_ai = KubeAI(disable_execution)
+    console.print(":robot: starting conversation with KubeAI...")
     if not terminal:
         console.print("Type 'exit' to end the conversation.")
 
-    kube_gpt.start_chat(prompt, terminal=terminal)
+    kube_ai.start_chat(prompt, terminal=terminal)
 
 @chat_group.command()
-@click.option('--cmd', help='Kubectl command that kubeGPT will explain the results of')
+@click.option('--cmd', help='Kubectl command that KubeAI will explain the results of')
 @click.option('-p', '--prompt', help='Additional prompt to go along with command output, otherwise default prompt is used (optional)')
-@click.option('-t', '--terminal', is_flag=True, default=False, help='If terminal is enabled, kubeGPT will end the conversation (optional)')
-@click.option('--disable-execution', is_flag=True, default=False, help='If execution is disabled, kubeGPT wil not be capable of executing kubectl commands (optional)')
+@click.option('-t', '--terminal', is_flag=True, default=False, help='If terminal is enabled, KubeAI will end the conversation (optional)')
+@click.option('--disable-execution', is_flag=True, default=False, help='If execution is disabled, KubeAI wil not be capable of executing kubectl commands (optional)')
 def explain(cmd, prompt, terminal, disable_execution):
     """
-    kubectl command will be executed and KubeGPT will explain the result
+    kubectl command will be executed and KubeAI will explain the result
     """
 
     if not cmd.startswith("kubectl"):
@@ -50,21 +50,21 @@ def explain(cmd, prompt, terminal, disable_execution):
     if not prompt:
         prompt = "Concisely explain the output of the following command: " + cmd
 
-    kube_gpt = KubeGPT(disable_execution)
-    console.print("Explaining kubectl results with KubeGPT...")
+    kube_ai = KubeAI(disable_execution)
+    console.print("Explaining kubectl results with KubeAI...")
     if not terminal:
         console.print("Type 'exit' to end the conversation.")
 
-    kube_gpt.start_chat(prompt, command_output=output, terminal=terminal)
+    kube_ai.start_chat(prompt, command_output=output, terminal=terminal)
 
 
 @chat_group.command()
 @click.option('-p', '--prompt', help='A prompt describing the problem (optional)')
-@click.option('-t', '--terminal', is_flag=True, default=False, help='If terminal is enabled, kubeGPT will end the conversation (optional)')
-@click.option('--disable-execution', is_flag=True, default=False, help='If execution is disabled, kubeGPT wil not be capable of executing kubectl commands (optional)')
+@click.option('-t', '--terminal', is_flag=True, default=False, help='If terminal is enabled, KubeAI will end the conversation (optional)')
+@click.option('--disable-execution', is_flag=True, default=False, help='If execution is disabled, KubeAI wil not be capable of executing kubectl commands (optional)')
 def fix(prompt, terminal, disable_execution):
     """
-    kubeGPT will suggest a fix based on a description of the problem (or try to find a problem if none is provided)
+    KubeAI will suggest a fix based on a description of the problem (or try to find a problem if none is provided)
     """
 
     enhanced_prompt = "Look for the root cause of the problem and suggest a fix."
@@ -73,12 +73,12 @@ def fix(prompt, terminal, disable_execution):
     else:
         enhanced_prompt += "Try to find the problem with your tools, follow your best instincts for troubleshooting."
 
-    kube_gpt = KubeGPT(disable_execution)
-    console.print("Looking for fix with KubeGPT...")
+    kube_ai = KubeAI(disable_execution)
+    console.print("Looking for fix with KubeAI...")
     if not terminal:
         console.print("Type 'exit' to end the conversation.")
 
-    kube_gpt.start_chat(enhanced_prompt, terminal=terminal)
+    kube_ai.start_chat(enhanced_prompt, terminal=terminal)
 
 
 def main():

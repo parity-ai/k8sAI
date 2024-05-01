@@ -1,4 +1,4 @@
-# file: kubegpt/kuberag/chat.py
+# file: kubeai/kuberag/chat.py
 
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables.history import RunnableWithMessageHistory
@@ -6,7 +6,7 @@ from langchain.memory import ChatMessageHistory
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_openai_functions_agent
 from langchain.agents import AgentExecutor
-from kubegpt.kuberag.tools import get_all_tools
+from kubeai.kuberag.tools import get_all_tools
 
 llm = ChatOpenAI(model="gpt-4")
 
