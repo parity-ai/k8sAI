@@ -4,6 +4,7 @@ import json
 import os
 from prompt_toolkit import prompt
 from k8sAI.util import console
+import subprocess
 
 
 class ToolHandlerRegistry:
@@ -45,42 +46,20 @@ class ToolHandlerRegistry:
 # TODO: create proper tool handler objects with data parse fn, etc.
 
 
-def handle_kubectl_tool(input_string, prefix) -> bool:
+def handle_suggest_kubectl_tool(input_string, prefix) -> bool:
     """
     Handle the kubectl tool data.
 
     returns: True if the tool should terminate. False otherwise
     """
     json_part = input_string[len(prefix) :]
-    json_part = json_part.strip("'")
+    output = (json_part.strip("'")).split("||")
+    output, cmd = output[0], output[1]
+    
+    context = f"{cmd} was just run and it outputed {output}"
 
-    try:
-        data = json.loads(json_part)
-        if "notes" in data:
-            console.print("\n")
-            console.print(data["notes"])
-        if "query" in data:
-            cmd = prompt(
-                "Edit the cmd and press (enter) to run, \
-                          leave empty to return to GPT\n\n",
-                default=data["query"],
-            )
-            # Split the command into the command and its arguments for execvp
-            args = cmd.split()
-
-            # Check if any command is entered, then execute it
-            if args:
-                console.print("\n")
-                # Replace the current process with the new command
-                os.execvp(args[0], args)
-            else:
-                console.print("No command entered.")
-
-    except json.JSONDecodeError:
-        console.print("Error: The string is not valid JSON.", {json_part})
-
-    return True
+    return context, False
 
 
 registry = ToolHandlerRegistry()
-registry.register_tool("[Suggest_Kubectl_CMD_Tool]", handle_kubectl_tool)
+registry.register_tool("[Suggest_Kubectl_CMD_Tool]", handle_suggest_kubectl_tool)

@@ -45,6 +45,7 @@ class k8sAI:
             Args:
                 logs (str): The logs to provide to the bot.
         """
+        additional_context = None
         while True:
             if prompt:
                 user_prompt = prompt
@@ -54,6 +55,9 @@ class k8sAI:
             if user_prompt.lower() == "exit":
                 break
             # result = self.bot.invoke()
+            if additional_context != None:
+                user_prompt = f"if {additional_context} then {user_prompt}"
+                additional_context = None
             for chunk in self.bot.stream(
                 {"input": user_prompt, "logs": logs, "command_output": command_output},
                 config={"configurable": {"session_id": "<foo>"}},
@@ -70,16 +74,16 @@ class k8sAI:
                         )
                 # Observation
                 elif "steps" in chunk:
-                    pass
+                    continue
                 # Final result
                 elif "output" in chunk:
                     if registry.has_tool_handler(chunk["output"]):
-                        terminate = registry.use_handler(chunk["output"])
+                        additional_context, terminate = registry.use_handler(chunk["output"])
                         if terminate:
                             break
-
-                    console.print("k8sAI:")
-                    console.print(Markdown(chunk["output"]))
+                    else:
+                        console.print("k8sAI:")
+                        console.print(Markdown(chunk["output"]))
 
                 else:
                     raise ValueError()
