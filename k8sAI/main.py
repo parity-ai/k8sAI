@@ -9,9 +9,9 @@ import click
 from k8sAI.kuberag.main import k8sAI
 from k8sAI.util import console
 
-
-@click.group()
-def chat_group():
+@click.group(invoke_without_command=True)
+@click.pass_context
+def chat_group(ctx):
     """
     This tool uses OpenAI's ChatGPT to chat about Kubernetes.
     It is enhanced with a retriever storing k8s documentation to improve results.
@@ -19,6 +19,7 @@ def chat_group():
 
     NOTE: This tool sends data to OpenAI's servers. Please review the OpenAI API terms of use.
     """
+    chat(None)
 
 
 @chat_group.command()

@@ -13,6 +13,8 @@ from langchain.pydantic_v1 import BaseModel, Field
 from langchain.tools import BaseTool
 from rich.padding import Padding
 from k8sAI.util import console
+from prompt_toolkit import prompt
+
 
 
 def retriever_tool(retriever):
@@ -66,10 +68,28 @@ class SuggestKubectlCommandTool(BaseTool):
     ) -> str:
         # return this as a jsonified string so that we can parse and return it in the frontend
         data_dict = {"notes": notes, "query": query}
+        if notes:
+            console.print("\n")
+            console.print(notes)
+        if query:
+            cmd = prompt(
+                "Edit the cmd and press (enter) to run, leave empty to return to GPT\n\n",
+                default=query,
+            )
+        args = cmd.split()
 
-        # Convert the dictionary to a JSON string
-        jsonified = json.dumps(data_dict)
-        return f"[Suggest_Kubectl_CMD_Tool]{jsonified}"
+        # Check if any command is entered, then execute it
+        if args:
+            console.print("\n")
+            try:
+                output = subprocess.check_output(cmd, shell=True).decode("utf-8")
+                console.print(output)
+            except Exception as e:
+                output = str(e)
+        else:
+            console.print("No command entered.")
+
+        return f"[Suggest_Kubectl_CMD_Tool]{output}||{cmd}"
 
     async def _arun(
         self,
