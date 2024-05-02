@@ -56,7 +56,7 @@ class k8sAI:
                 break
             # result = self.bot.invoke()
             if additional_context != None:
-                user_prompt = f"if {additional_context} then {user_prompt}"
+                user_prompt = f"using this \n{additional_context} \nrespond to this: {user_prompt}"
                 additional_context = None
             for chunk in self.bot.stream(
                 {"input": user_prompt, "logs": logs, "command_output": command_output},

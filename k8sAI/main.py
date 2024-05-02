@@ -9,7 +9,6 @@ import click
 from k8sAI.kuberag.main import k8sAI
 from k8sAI.util import console
 
-
 @click.group(invoke_without_command=True)
 @click.pass_context
 def chat_group(ctx):
