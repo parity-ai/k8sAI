@@ -52,9 +52,9 @@ def handle_suggest_kubectl_tool(input_string, prefix) -> bool:
 
     returns: True if the tool should terminate. False otherwise
     """
-    json_part = input_string[len(prefix) :]
-    output = (json_part.strip("'")).split("||")
-    output, cmd = output[0], output[1]
+    cmd_and_output = input_string[len(prefix) :]
+    cmd_and_output = (cmd_and_output.strip("'")).split("||")
+    output, cmd = cmd_and_output[0], cmd_and_output[1]
     
     context = f"{cmd} was just run and it outputed {output}"
 

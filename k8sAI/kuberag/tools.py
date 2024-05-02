@@ -81,7 +81,6 @@ class SuggestKubectlCommandTool(BaseTool):
         # Check if any command is entered, then execute it
         if args:
             console.print("\n")
-            # Replace the current process with the new comma
             try:
                 output = subprocess.check_output(cmd, shell=True).decode("utf-8")
                 console.print(output)
