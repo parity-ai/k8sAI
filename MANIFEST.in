@@ -1,1 +1,1 @@
-recursive-include k9ai/kuberag/embeddings *
+recursive-include k8sAI/kuberag/embeddings *

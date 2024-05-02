@@ -1,4 +1,4 @@
-# file: k9ai/kuberag/tools.py
+# file: k8sAI/kuberag/tools.py
 
 import json
 import re
@@ -12,7 +12,7 @@ from langchain.tools.retriever import create_retriever_tool
 from langchain.pydantic_v1 import BaseModel, Field
 from langchain.tools import BaseTool
 from rich.padding import Padding
-from k9ai.util import console
+from k8sAI.util import console
 
 
 def retriever_tool(retriever):

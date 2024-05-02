@@ -1,13 +1,13 @@
-# file: k9ai/kuberag/main.py
+# file: k8sAI/kuberag/main.py
 import os
 import pkg_resources
 from rich.padding import Padding
 from rich.markdown import Markdown
 
-from k9ai.kuberag.chat import create_bot
-from k9ai.kuberag.retriever import load_retriever
-from k9ai.kuberag.tool_handler import registry
-from k9ai.util import console
+from k8sAI.kuberag.chat import create_bot
+from k8sAI.kuberag.retriever import load_retriever
+from k8sAI.kuberag.tool_handler import registry
+from k8sAI.util import console
 
 
 def get_embeddings_path():
@@ -16,9 +16,9 @@ def get_embeddings_path():
     return resource_path
 
 
-class K9ai:
+class k8sAI:
     """
-    K9ai is a class that allows you to chat with a GPT model.
+    k8sAI is a class that allows you to chat with a GPT model.
     It uses a retriever to find relevant information.
         Args:
             disable_execution (bool): If True, the bot cannot execute kubectl commands to help.
@@ -78,7 +78,7 @@ class K9ai:
                         if terminate:
                             break
 
-                    console.print("K9ai:")
+                    console.print("k8sAI:")
                     console.print(Markdown(chunk["output"]))
 
                 else:
@@ -90,6 +90,6 @@ class K9ai:
 
 
 if __name__ == "__main__":
-    path = os.path.join(os.getcwd(), "k9ai/kuberag/embeddings")
-    k9ai = K9ai(embeddings_path=path)
-    k9ai.start_chat(None)
+    path = os.path.join(os.getcwd(), "k8sAI/kuberag/embeddings")
+    k8sAI = k8sAI(embeddings_path=path)
+    k8sAI.start_chat(None)

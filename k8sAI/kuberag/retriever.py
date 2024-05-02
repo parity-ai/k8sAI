@@ -1,8 +1,8 @@
-# file: k9ai/kuberag/retriever.py
+# file: k8sAI/kuberag/retriever.py
 
 from langchain_chroma import Chroma
 from langchain_openai import OpenAIEmbeddings
-from k9ai.util import console
+from k8sAI.util import console
 
 
 def load_retriever(embeddings_path: str):

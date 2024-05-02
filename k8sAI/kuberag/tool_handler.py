@@ -1,9 +1,9 @@
-# file: k9ai/kuberag/tool_handler.py
+# file: k8sAI/kuberag/tool_handler.py
 
 import json
 import os
 from prompt_toolkit import prompt
-from k9ai.util import console
+from k8sAI.util import console
 
 
 class ToolHandlerRegistry:
