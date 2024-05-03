@@ -14,7 +14,7 @@ from langchain.tools import BaseTool
 from rich.padding import Padding
 from k8sAI.util import console
 from prompt_toolkit import prompt
-
+from prompt_toolkit.styles import Style
 
 
 def retriever_tool(retriever):
@@ -66,11 +66,8 @@ class SuggestKubectlCommandTool(BaseTool):
         query: str,
         run_manager: Optional[CallbackManagerForToolRun] = None,
     ) -> str:
-        # return this as a jsonified string so that we can parse and return it in the frontend
-        data_dict = {"notes": notes, "query": query}
         if notes:
-            console.print("\n")
-            console.print(notes)
+            console.print("\nNote: " + notes + "\n", style="italic")
         if query:
             cmd = prompt(
                 "Edit the cmd and press (enter) to run, leave empty to return to GPT\n\n",
@@ -139,6 +136,18 @@ class ExecuteKubectlCommandTool(BaseTool):
         ]
         if not any(re.match(pattern, command) for pattern in allowed_patterns):
             return "Error: Command is not permitted, must be a read-only operation"
+
+        console.print(
+            Padding(
+                "k8sAI is requesting to run the following command:", pad=(0, 0, 0, 2)
+            )
+        )
+        console.print(Padding(command + "\n", pad=(0, 0, 0, 4)), style="yellow")
+        user_response = ""
+        while user_response.lower() not in ["y", "n"]:
+            user_response = input("  Enter y/n to approve/deny: ")
+        if user_response.lower() == "n":
+            return "User did not approve command execution. You can suggest the command instead."
 
         try:
             console.print(

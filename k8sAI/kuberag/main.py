@@ -67,10 +67,10 @@ class k8sAI:
                     for action in chunk["actions"]:
                         console.print(
                             Padding(
-                                f":hammer: Calling Tool: `{action.tool}` with input `\
-                                              {action.tool_input}`",
+                                f":hammer: Calling Tool: `{action.tool}` with input `{action.tool_input}`",
                                 pad=(0, 0, 0, 2),
-                            )
+                            ),
+                            style="italic bright_black",
                         )
                 # Observation
                 elif "steps" in chunk:
@@ -78,11 +78,13 @@ class k8sAI:
                 # Final result
                 elif "output" in chunk:
                     if registry.has_tool_handler(chunk["output"]):
-                        additional_context, terminate = registry.use_handler(chunk["output"])
+                        additional_context, terminate = registry.use_handler(
+                            chunk["output"]
+                        )
                         if terminate:
                             break
                     else:
-                        console.print("k8sAI:")
+                        console.print("k8sAI:\n", style="bold green")
                         console.print(Markdown(chunk["output"]))
 
                 else:
