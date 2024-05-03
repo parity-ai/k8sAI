@@ -3,11 +3,12 @@
 This module contains the commands for the CLI.
 """
 
+from mimetypes import init
 import subprocess
 import click
 
 from k8sAI.kuberag.main import k8sAI
-from k8sAI.util import console
+from k8sAI.util import console, usage
 
 
 @click.group()
@@ -44,6 +45,7 @@ def chat(prompt, terminal, disable_execution):
     Start a conversation with the k8sAI model.
     k8sAI can suggest commands that can then be executed.
     """
+    usage.log_event("chat_command")
     kube_ai = k8sAI(disable_execution)
     console.print("\n:robot: starting conversation with k8sAI...", style="bold green")
     if not terminal:
@@ -78,7 +80,7 @@ def explain(cmd, prompt, terminal, disable_execution):
     """
     kubectl command will be executed and k8sAI will explain the result
     """
-
+    usage.log_event("explain_command")
     if not cmd.startswith("kubectl"):
         console.print("Error: Command must be kubectl command")
         return
@@ -119,7 +121,7 @@ def fix(prompt, terminal, disable_execution):
     k8sAI will suggest a fix based on a description of the problem
     (or try to find a problem if none is provided)
     """
-
+    usage.log_event("fix_command")
     enhanced_prompt = "Look for the root cause of the problem and suggest a fix."
     if prompt:
         enhanced_prompt += "The problem is:\n" + prompt
@@ -139,4 +141,5 @@ def main():
     """
     Main function for the CLI.
     """
+    usage.setup()
     chat_group()
