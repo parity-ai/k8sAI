@@ -45,9 +45,9 @@ def chat(prompt, terminal, disable_execution):
     k8sAI can suggest commands that can then be executed.
     """
     kube_ai = k8sAI(disable_execution)
-    console.print(":robot: starting conversation with k8sAI...")
+    console.print("\n:robot: starting conversation with k8sAI...", style="bold green")
     if not terminal:
-        console.print("Type 'exit' to end the conversation.")
+        console.print("   type 'exit' to end the conversation.", style="italic")
 
     kube_ai.start_chat(prompt, terminal=terminal)
 
