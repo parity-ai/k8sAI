@@ -3,7 +3,7 @@ from setuptools.command.install import install
 
 setup(
     name="k8sAI",
-    version="0.1.4",
+    version="0.1.7",
     packages=find_packages(),
     description="A conversational AI for Kubernetes users.",
     long_description=open("README.md").read(),

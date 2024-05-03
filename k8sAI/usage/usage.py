@@ -21,7 +21,6 @@ class Usage:
 
         if os.path.exists(config_path):
             config.read(config_path)
-            print(config.sections())
             # Check if 'usage' section and necessary keys exist
             if "usage" in config and "usage_enabled" in config["usage"]:
                 self.enabled = config["usage"].getboolean("usage_enabled")
