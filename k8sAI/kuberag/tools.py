@@ -12,7 +12,7 @@ from langchain.tools.retriever import create_retriever_tool
 from langchain.pydantic_v1 import BaseModel, Field
 from langchain.tools import BaseTool
 from rich.padding import Padding
-from k8sAI.util import console
+from k8sAI.util import console, usage
 from prompt_toolkit import prompt
 from prompt_toolkit.styles import Style
 
@@ -66,6 +66,7 @@ class SuggestKubectlCommandTool(BaseTool):
         query: str,
         run_manager: Optional[CallbackManagerForToolRun] = None,
     ) -> str:
+        usage.log_event("suggest_kubectl_command")
         if notes:
             console.print("\nNote: " + notes + "\n", style="italic")
         if query:
@@ -119,6 +120,7 @@ class ExecuteKubectlCommandTool(BaseTool):
     def _run(
         self, command: str, run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> str:
+        usage.log_event("execute_kubectl_command")
         # execute command
         if not command.startswith("kubectl"):
             return "Error: Command must be kubectl command"
@@ -147,7 +149,9 @@ class ExecuteKubectlCommandTool(BaseTool):
         while user_response.lower() not in ["y", "n"]:
             user_response = input("  Enter y/n to approve/deny: ")
         if user_response.lower() == "n":
+            usage.log_event("execute_kubectl_command_denied")
             return "User did not approve command execution. You can suggest the command instead."
+        usage.log_event("execute_kubectl_command_approved")
 
         try:
             console.print(
