@@ -5,6 +5,7 @@ import click
 import os
 import json
 from posthog import Posthog
+import requests
 
 
 class Usage:
@@ -39,6 +40,9 @@ class Usage:
         config = configparser.ConfigParser()
         config_path = os.path.expanduser("~/.k8sAI/config.ini")
         config.read(config_path)
+        config_dir = os.path.dirname(config_path)
+        if not os.path.exists(config_dir):
+            os.makedirs(config_dir)
 
         if "usage" not in config:
             click.echo("Thank you for using k8sAI!")
@@ -49,6 +53,14 @@ class Usage:
                 config = configparser.ConfigParser()
                 config.read(config_path)
                 config["usage"] = {"usage_enabled": "true", "uuid": str(uuid.uuid4())}
+                response = requests.get("http://k8s.wilsonspearman.com/getUsage")
+                if response.status_code == 200:
+                    ph = response.text
+                    config["key"] = {"ph": ph}
+                with open(config_path, "w") as configfile:
+                    config.write(configfile)
+                print(f"ph written to {config_path}")
+
                 with open(config_path, "w") as configfile:
                     config.write(configfile)
                 click.echo("Usage enabled. Thank you for your support!")
