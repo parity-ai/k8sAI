@@ -14,8 +14,8 @@ k8sAI has a few tools at its disposal that it can call to answer your questions 
 - `k8s_search` - This tool is used by k8sAI to search k8s documentation to provide informed solutions
 
 ### Note:
-This tool sends data to OpenAI's servers. Please review the OpenAI API terms of use before using this tool.
-This tool also executes `kubectl` commands. While they should be read-only commands, unintended consequences are possible. Use the `--disable-execution` command if you want to be extra-safe.
+This tool sends data to OpenAI's servers. Please review the OpenAI API terms of use before using this tool.n
+This tool also executes `kubectl` commands. They are filtered to be read-only commands, but **you provide explicit approval via (y/n) before every command executes**.
 
 ## Installation
 
