@@ -103,6 +103,11 @@ def explain(cmd, prompt, terminal, disable_execution):
 @chat_group.command()
 @click.option("-p", "--prompt", help="A prompt describing the problem (optional)")
 @click.option(
+    "-d",
+    "--deployment",
+    help="The specifc deployment to investigate (optional)",
+)
+@click.option(
     "-t",
     "--terminal",
     is_flag=True,
@@ -116,7 +121,7 @@ def explain(cmd, prompt, terminal, disable_execution):
     help="If execution is disabled, k8sAI wil not be capable of \
                 executing kubectl commands (optional)",
 )
-def fix(prompt, terminal, disable_execution):
+def fix(prompt, deployment, terminal, disable_execution):
     """
     k8sAI will suggest a fix based on a description of the problem
     (or try to find a problem if none is provided)
@@ -128,6 +133,9 @@ def fix(prompt, terminal, disable_execution):
     else:
         enhanced_prompt += "Try to find the problem with your tools, \
             follow your best instincts for troubleshooting."
+
+    if deployment:
+        enhanced_prompt += f" Investigate the deployment {deployment} specifically."
 
     kube_ai = k8sAI(disable_execution)
     console.print("Looking for fix with k8sAI...")
